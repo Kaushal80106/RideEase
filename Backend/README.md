@@ -86,3 +86,140 @@ Example:
   ]
 }
 ```
+
+# User Login Endpoint
+
+## Endpoint
+`POST /users/login`
+
+## Description
+This endpoint is used to log in an existing user. It requires the user's email and password.
+
+## Request Body
+The request body must be a JSON object containing the following fields:
+- `email` (string, required): The email address of the user. Must be a valid email format.
+- `password` (string, required): The password for the user. Must be at least 6 characters long.
+
+Example:
+```json
+{
+  "email": "john.doe@example.com",
+  "password": "password123"
+}
+```
+
+## Responses
+
+### Success
+**Status Code:** `200 OK`
+
+**Response Body:**
+```json
+{
+  "token": "jwt-token",
+  "user": {
+    "_id": "user-id",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john.doe@example.com"
+  }
+}
+```
+
+### Validation Errors
+**Status Code:** `400 Bad Request`
+
+**Response Body:**
+```json
+{
+  "errors": [
+    {
+      "msg": "Invalid",
+      "param": "email",
+      "location": "body"
+    },
+    {
+      "msg": "password must be atleast 6 character",
+      "param": "password",
+      "location": "body"
+    }
+  ]
+}
+```
+
+### Invalid Credentials
+**Status Code:** `401 Unauthorized`
+
+**Response Body:**
+```json
+{
+  "message": "Invalid email or password"
+}
+```
+
+# Get User Profile Endpoint
+
+## Endpoint
+`GET /users/profile`
+
+## Description
+This endpoint is used to retrieve the profile of the authenticated user.
+
+## Responses
+
+### Success
+**Status Code:** `200 OK`
+
+**Response Body:**
+```json
+{
+  "_id": "user-id",
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "email": "john.doe@example.com"
+}
+```
+
+### Unauthorized
+**Status Code:** `401 Unauthorized`
+
+**Response Body:**
+```json
+{
+  "message": "Unauthorized"
+}
+```
+
+# User Logout Endpoint
+
+## Endpoint
+`GET /users/logout`
+
+## Description
+This endpoint is used to log out the authenticated user. The token used for authentication will be blacklisted to prevent further use.
+
+## Responses
+
+### Success
+**Status Code:** `200 OK`
+
+**Response Body:**
+```json
+{
+  "message": "Logged out"
+}
+```
+
+### Unauthorized
+**Status Code:** `401 Unauthorized`
+
+**Response Body:**
+```json
+{
+  "message": "Unauthorized"
+}
+```
